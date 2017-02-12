@@ -23,26 +23,23 @@ public class EnvironmentController implements IController {
 	@Override
 	public void init() {
 		FileConfiguration config = oracle.getConfig();
-		if (config.isConfigurationSection("environment")) {
+		if (!config.isConfigurationSection("environment")) {
 			config.set("environment.active", true);
 		}
-		section = oracle.getConfig().getConfigurationSection("environment");
-
-		active = section.getBoolean("active");
+		this.section = oracle.getConfig().getConfigurationSection("environment");
+		this.active = section.getBoolean("active");
 
 		oracle.getServer().getPluginManager().registerEvents(this, oracle);
 	}
 
 	@EventHandler
 	public void onWeatherChange(WeatherChangeEvent event) {
-		if (active) {
-			event.setCancelled(event.toWeatherState());
-		}
+		event.setCancelled(active && event.toWeatherState());
 	}
 
 	@Override
 	public String getName() {
-		return "Environment";
+		return "environment";
 	}
 
 	public void setActive(boolean active) {
