@@ -8,11 +8,8 @@ import me.crypnotic.oracle.api.AbstractController;
 
 public class EnvironmentController extends AbstractController {
 
-	private final Oracle oracle;
-
 	public EnvironmentController(final Oracle oracle) {
 		super(oracle);
-		this.oracle = oracle;
 	}
 
 	@EventHandler
