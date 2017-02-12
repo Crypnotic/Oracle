@@ -1,35 +1,18 @@
 package me.crypnotic.oracle.controllers;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-import lombok.Getter;
 import me.crypnotic.oracle.Oracle;
-import me.crypnotic.oracle.api.IController;
+import me.crypnotic.oracle.api.AbstractController;
 
-public class EnvironmentController implements IController {
+public class EnvironmentController extends AbstractController {
 
 	private final Oracle oracle;
-	private ConfigurationSection section;
-	@Getter
-	private boolean active;
 
 	public EnvironmentController(final Oracle oracle) {
+		super(oracle);
 		this.oracle = oracle;
-	}
-
-	@Override
-	public void init() {
-		FileConfiguration config = oracle.getConfig();
-		if (!config.isConfigurationSection("environment")) {
-			config.set("environment.active", true);
-		}
-		this.section = oracle.getConfig().getConfigurationSection("environment");
-		this.active = section.getBoolean("active");
-
-		oracle.getServer().getPluginManager().registerEvents(this, oracle);
 	}
 
 	@EventHandler
@@ -42,9 +25,9 @@ public class EnvironmentController implements IController {
 		return "environment";
 	}
 
+	@Override
 	public void setActive(boolean active) {
-		this.active = active;
-		section.set("active", active);
+		super.setActive(active);
 
 		if (active) {
 			oracle.getServer().getWorlds().forEach((world) -> {
